@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -32,6 +33,11 @@ import android.text.format.Time;
 import android.widget.Toast;
 import android.widget.AdapterView;
 import java.text.SimpleDateFormat;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences;
+
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -61,10 +67,12 @@ public class forecastFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute("94043");
+//            FetchWeatherTask weatherTask = new FetchWeatherTask();
+//            weatherTask.execute("94043");
+            updateWeather();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -73,25 +81,25 @@ public class forecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        String[] weatherList = {
-                "Mon 6/23?- Sunny - 31/17",
-                "Tue 6/24 - Foggy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - Thunder - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
-
-        };
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(weatherList));
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
+//        String[] weatherList = {
+//                "Mon 6/23?- Sunny - 31/17",
+//                "Tue 6/24 - Foggy - 21/8",
+//                "Wed 6/25 - Cloudy - 22/17",
+//                "Thurs 6/26 - Rainy - 18/11",
+//                "Fri 6/27 - Foggy - 21/10",
+//                "Sat 6/28 - Thunder - 23/18",
+//                "Sun 6/29 - Sunny - 20/7"
+//
+//        };
+//        List<String> weekForecast = new ArrayList<String>(Arrays.asList(weatherList));
 
         weatherArrayAd = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast
+                new ArrayList<String>()
         );
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -112,6 +120,21 @@ public class forecastFragment extends Fragment {
         return rootView;
     }
 
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_loc_key),
+                getString(R.string.pref_default_location));
+        String units = prefs.getString(getString(R.string.pref_units_key),
+                getString(R.string.pref_units_metric));
+        String[] arrayRes = {location,units};
+        weatherTask.execute(location,units);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]>{
 
@@ -245,7 +268,7 @@ public class forecastFragment extends Fragment {
                 Uri builtUri = Uri.parse(forecastURLBase).buildUpon()
                         .appendQueryParameter(queryPar,theurl[0])
                         .appendQueryParameter(formatPar,format)
-                        .appendQueryParameter(unitPar, units)
+                        .appendQueryParameter(unitPar, theurl[1])
                         .appendQueryParameter(dayPar, Integer.toString(numDays))
                         .build();
                 url = new URL(builtUri.toString());
