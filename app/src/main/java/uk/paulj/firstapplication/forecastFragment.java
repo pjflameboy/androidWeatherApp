@@ -1,5 +1,6 @@
 package uk.paulj.firstapplication;
 
+import android.content.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.text.format.Time;
+import android.widget.Toast;
+import android.widget.AdapterView;
 import java.text.SimpleDateFormat;
 /**
  * A placeholder fragment containing a simple view.
@@ -95,10 +98,20 @@ public class forecastFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(weatherArrayAd);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String forecast = weatherArrayAd.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(intent);
+                }
 
+        });
 
         return rootView;
     }
+
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]>{
 
