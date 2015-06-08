@@ -11,11 +11,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class MainActivity extends ActionBarActivity {
-
+    private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.v(LOG_TAG, "in onCreate");
     }
 
 
@@ -70,5 +71,35 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
+    }
+
+    @Override
+    protected void onPause() {
+        Log.v(LOG_TAG, "in onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.v(LOG_TAG, "in onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.v(LOG_TAG, "in onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.v(LOG_TAG, "in onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.v(LOG_TAG, "in onDestroy");
+        super.onDestroy();
     }
 }
