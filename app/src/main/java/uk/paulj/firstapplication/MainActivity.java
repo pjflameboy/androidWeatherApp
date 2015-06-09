@@ -11,12 +11,18 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class MainActivity extends ActionBarActivity {
-    private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+    private String mLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.v(LOG_TAG, "in onCreate");
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .commit();
+        }
     }
 
 
@@ -68,6 +74,19 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String location = Utility.getPreferredLocation( this );
+        // update the location in our second pane using the fragment manager
+        if (location != null && !location.equals(mLocation)) {
+            forecastFragment ff = (forecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if ( null != ff ) {
+                ff.onLocationChanged();
+            }
+            mLocation = location;
+        }
+    }
 
     @Override
     protected void onPause() {
@@ -87,11 +106,6 @@ public class MainActivity extends ActionBarActivity {
         super.onStop();
     }
 
-    @Override
-    protected void onResume() {
-        Log.v(LOG_TAG, "in onResume");
-        super.onResume();
-    }
 
     @Override
     protected void onDestroy() {

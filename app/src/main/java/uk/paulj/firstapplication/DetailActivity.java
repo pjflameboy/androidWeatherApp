@@ -22,6 +22,7 @@ public class DetailActivity extends ActionBarActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
