@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">First Application</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -6,4 +6,8 @@
     <string name="action_share">Share</string>
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_detail">Details</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="format_full_friendly_date"><xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g></string>
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
 </resources>
