@@ -51,11 +51,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void openPerferredLocationMap() {
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        String location = sharedPrefs.getString(
-                getString(R.string.pref_loc_key),
-                getString(R.string.pref_default_location));
+        String location = Utility.getPreferredLocation(this);
 
         String geobase = "geo:0,0?";
         String queryPar = "q";
